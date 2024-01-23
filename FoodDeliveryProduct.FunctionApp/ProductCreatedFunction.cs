@@ -1,5 +1,7 @@
 using Azure;
+using Azure.Core;
 using Azure.Data.Tables;
+using Azure.Identity;
 using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Specialized;
 using FoodDeliveryProduct.FunctionApp.Models;
@@ -33,8 +35,9 @@ namespace FoodDeliveryProduct.FunctionApp
 
             string uri = Environment.GetEnvironmentVariable("EndpointToBlob");
             string blobName = Environment.GetEnvironmentVariable("Name");
-            string sasToWrite = Environment.GetEnvironmentVariable("ToCreatAndAddBlob");
-            BlobContainerClient blobContainerClient = new BlobContainerClient(new Uri(uri), new AzureSasCredential(sasToWrite));
+            //string sasToWrite = Environment.GetEnvironmentVariable("ToCreatAndAddBlob");
+            TokenCredential token = new DefaultAzureCredential();
+            BlobContainerClient blobContainerClient = new BlobContainerClient(new Uri(uri),token);//new AzureSasCredential(sasToWrite));
 
             //BlobClient blobClient = new BlobClient(new Uri(uri), new AzureSasCredential(sasToRead));
             AppendBlobClient appendBlobClient = blobContainerClient.GetAppendBlobClient(blobName);
